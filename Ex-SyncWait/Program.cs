@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,20 +17,23 @@ namespace Ex_SyncWait
         {
 
             Console.WriteLine("====== Ex Start ======");
-
-            //string strHost = ConfigurationManager.AppSettings["smtpServer"];
-            //int Port = Convert.ToInt32(ConfigurationManager.AppSettings["smtpPort"]);
-            //string Subject = ConfigurationManager.AppSettings["Subject"];
-            //Console.WriteLine(strHost);
-            //Console.WriteLine(Port);
-            //Console.WriteLine(Subject);
-            
             new ExC(new Email()).GameStartSave();
             Console.WriteLine("====== Ex End ======");
-            Console.ReadLine();
+
+            Console.WriteLine("====== Ex002 Start ======");
+            string content = await MyDownloadPage("http://huan-lin.blogspot.com");
+            Console.WriteLine("網頁內容總共為 {0} 個字元。", content.Length);
+            Console.WriteLine("====== Ex002 End ======");
+            Console.ReadKey();
         }
 
-        
+        static async Task<string> MyDownloadPageAsync(string url)
+        {
+            var webClient = new WebClient();  // 須引用 System.Net 命名空間。
+            var result = webClient.DownloadString(url);
+            string content = await result;
+            return content;
+        }
     }
 
     public class ExC
